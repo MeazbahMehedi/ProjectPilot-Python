@@ -1,0 +1,2 @@
+# Optional, only for generating the README screenshots:
+Pillow

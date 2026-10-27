@@ -1,0 +1,7 @@
+1. Extract the ZIP completely. Do not run the app from inside the ZIP viewer.
+2. Open README.md for the full guide.
+3. On Windows, double-click START-WINDOWS.bat.
+4. Demo supervisor: teacher / DemoPass123!
+   Demo student:    student / DemoPass123!
+5. The workspace is created locally on first launch. No MySQL setup is needed.
+6. Change demo passwords before entering real records.

@@ -1,0 +1,5 @@
+APP_NAME = 'ProjectPilot'
+EDITION = 'Python'
+AUTHOR = 'MEAZBAH MEHEDI'
+GITHUB = 'https://github.com/MeazbahMehedi'
+ACCENT = '#7c6cf2'

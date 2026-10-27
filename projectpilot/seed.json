@@ -1,0 +1,8 @@
+[
+ {"title":"Personal Finance Assistant","supervisor":"Dr. Zhang","category":"Python & Data","description":"Build an offline finance workspace with budgets, spending insights, and clear visual reports. Explore data validation and accessible desktop design.","capacity":4,"days":28,"status":"Open"},
+ {"title":"Campus Resource Booking","supervisor":"Dr. Li","category":"Software Engineering","description":"Design a reliable room and equipment reservation system with conflict detection, account roles, and booking history.","capacity":3,"days":21,"status":"Open"},
+ {"title":"Network Threat Observatory","supervisor":"Dr. Wang","category":"Cybersecurity","description":"Analyze supplied network captures and visualize traffic patterns. Build a reproducible, local-first investigation workflow.","capacity":3,"days":35,"status":"Open"},
+ {"title":"Accessible Study Companion","supervisor":"Dr. Chen","category":"Human-Computer Interaction","description":"Prototype an accessible study planner with keyboard navigation, readable typography, reminders, and usability evaluation.","capacity":2,"days":18,"status":"Open"},
+ {"title":"Code Quality Research Lab","supervisor":"Dr. Zhang","category":"AI & Research","description":"Evaluate static analysis findings in generated code with a documented labeling workflow and reproducible experiments.","capacity":2,"days":42,"status":"Open"},
+ {"title":"Smart Inventory Workspace","supervisor":"Dr. Li","category":"Software Engineering","description":"Plan an inventory tool with stock movements, low-stock summaries, and CSV reporting. This draft is visible only to supervisors.","capacity":4,"days":50,"status":"Draft"}
+]

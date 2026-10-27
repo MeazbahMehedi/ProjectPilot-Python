@@ -1,0 +1,2 @@
+# No pip dependencies. Python 3.10+ with Tkinter and SQLite is enough.
+# On Ubuntu/Debian, install python3-tk if Tkinter is missing.
