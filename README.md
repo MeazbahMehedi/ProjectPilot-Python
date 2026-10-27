@@ -1,263 +1,292 @@
-# ProjectPilot 2.0 — Python Edition
+# ProjectPilot — Python Edition
 
-**Discover a topic. Find your team. Build your next chapter.**
+**Version 3.0.1** · Academic project selection, applications and supervision
 
-Python 3.10+ · Tkinter · SQLite · Offline desktop
-
-**Project history:** This project was originally written in **Java** as **ProjectSelectionManager**, using Swing and MySQL. It was then **converted to Python** and redesigned with Tkinter, SQLite, safer selection rules, and new features. This is a Python rewrite of the original workflows, not a Java wrapper.
+Originally written in **Java** as **ProjectSelectionManager**, then **converted to Python** and extended into this Tkinter/SQLite desktop application.
 
 Maintained for **MEAZBAH MEHEDI** · [GitHub](https://github.com/MeazbahMehedi)
 
-## What this app does
+## What changed in 3.0.1
 
-A local desktop workspace for managing university project topics. Supervisors create topics and monitor assignments. Students discover topics, save favorites, select a project, or wait for a seat. All changes save automatically on this computer.
+This release extends topic selection into a project application and supervision workflow.
 
-### Features
-
-| Area | Included behavior |
+| Area | 3.0.1 update |
 | --- | --- |
-| Interface | Sidebar navigation, dark/light themes, readable cards, resizable windows |
-| Discovery | Live search across titles, supervisors, categories and descriptions; category filters; saved-topic filter |
-| Tables | Sort by clicking a column heading; scrollable lists |
-| Accounts | Student registration, individual sign-in, password changes, supervisor/student roles |
-| Projects | Create, edit, delete; descriptions, categories, deadlines, Draft/Open/Closed states |
-| Selection | One active project per student; atomic switching; capacity derived from assignments |
-| Waitlists | Join/leave a full project's FIFO queue; auto-assign eligible students when a seat opens |
-| Overview | Topic count, available seats, student/assignment summary, occupancy bars, recent activity |
-| Reports | Supervisor student-assignment view; role-scoped activity timeline |
-| Export | Project catalog as CSV; projects, permitted student records and activity as JSON |
-| Backup | Supervisor-only workspace backup; manual restore instructions below |
-| Shortcuts | `Ctrl+F` opens project search; `F5` refreshes the current view |
+| Administration | Create supervisor/student/admin accounts; enable/disable accounts; reset passwords; configure an inclusive selection period |
+| Supervisor ownership | Supervisors manage only their own projects, applications, assigned/applicant students, milestones and submissions; administrators oversee all projects |
+| Approval workflow | Individual or team proposals; approve, reject, request changes, revise and resubmit, or withdraw |
+| Selection modes | New topics default to **Approval**. **Direct** topics retain immediate selection, atomic switching and FIFO waitlists |
+| Teams | Student-created teams, invitation acceptance/decline, leader and member roles, one team proposal with a fixed applicant snapshot |
+| Progress | Five default milestones per assignment, status tracking, completion percentage, custom supervisor milestones and due dates |
+| Submissions | Repository/report links and local document attachments; supervisor feedback; Accepted or Changes requested decisions |
+| Notifications | Invitations, application decisions, assignments, feedback, account changes and approaching deadlines; unread counter and mark-as-read |
+| CSV imports | Read-only preview, hidden passwords, validation and all-or-nothing import; project and student templates |
+| Original MySQL migration | Paired Projects/Students CSV migration preserving assignments and leading-zero student IDs; total capacity = remaining seats + assigned students |
+| PDF reports | Project summaries, assignments, milestone progress and supervisor workload; paginated A4 output |
+| Preferences | Theme, text size, window dimensions, project search, category and saved-topic filter persist per account |
+| Interface | Selection-mode/status badges in tables, deadline countdowns, seat bars, inline form errors, unsaved-change prompts and save feedback |
+| Accessibility | Adjustable text, visible native focus, Tab/Shift+Tab navigation, Ctrl+F search, Alt+1-9 page navigation and F5 refresh |
+| Upgrade safety | Automatic same-edition 2.0 migration, pre-upgrade backup, preserved existing assignments and Direct selection behavior |
+| Windows delivery | Installer recipe, application icon, PowerShell builder, desktop/start-menu shortcuts and a manual GitHub Actions build workflow |
 
-A student can see only their own student record and activity. Draft topics are supervisor-only. Registered users are always students; the included supervisor account is created by the app.
+**Windows installer status:** Source/build files are included. A prebuilt Windows `.exe` is not included in this ZIP because this release was built and checked on Linux. The Windows workflow is configured to bundle the runtime so the installed app can run without Python, Java or an IDE. See [the Windows build guide](docs/WINDOWS-INSTALLER.md).
 
-## Demo accounts
+## Quick start
 
-The app creates a fictional demo workspace only when no workspace exists.
+Extract the entire ZIP into a writable directory, then open **START-WINDOWS.bat**. The Python source edition needs Python with Tkinter; the Java edition needs desktop Java 17+. The Java ZIP includes a runnable JAR. Neither edition needs MySQL.
 
-| Role | Account ID | Password |
+| Demo role | Account ID | Password |
 | --- | --- | --- |
+| Administrator | `admin` | `DemoPass123!` |
 | Supervisor | `teacher` | `DemoPass123!` |
 | Student | `student` | `DemoPass123!` |
-| Additional student | `student2` | `DemoPass123!` |
-| Additional student | `student3` | `DemoPass123!` |
+| Additional demo students | `student2`, `student3` | `DemoPass123!` |
 
-`student2` and `student3` start with example assignments. These accounts contain no real personal data. Change the demo passwords before entering real records. You can register more students from the login screen.
+The workspace starts with fictional topics and two example assignments. Use **Create student account** to register more students. Only an administrator can create supervisors or other administrators. Change demo passwords before entering real records.
 
-## Using the workspace
+When an old workspace already has an account named `admin`, migration creates a unique administrator ID instead of overwriting it. The login screen shows the bootstrap administrator ID.
 
-1. Sign in as `teacher` to review **Overview**, **Projects**, **Students**, **Activity**, and **Settings**.
-2. Open **Projects → New project**. Enter a title, supervisor, category, description, total capacity, date in `YYYY-MM-DD` format, and status.
-3. Sign out and sign in as a student. Search for a topic, open its details, and choose **Select / switch**.
-4. Open **My selection** to review or cancel the assignment. Switching succeeds only if the target project is open, within its deadline, and has room; a failed switch preserves the old assignment.
-5. For a full topic, a student without an active selection can choose **Join waitlist**. When a seat opens, the first eligible waiting student receives it automatically. Check **My selection** or refresh with `F5`.
-6. Use **Settings** for password changes and theme controls. Supervisors can create backups. Use the project toolbar to export CSV or JSON.
+## Roles and permissions
 
-### Selection rules
+| Action | Student | Supervisor (`teacher`) | Admin |
+| --- | --- | --- | --- |
+| Browse topics | Published topics | Own topics | All topics |
+| Apply / select / join waitlist | Own account or a leader's team proposal | — | — |
+| Manage teams | Own team | — | — |
+| Review applications and submissions | View own/team decisions | Own projects | All projects |
+| Manage topics / add milestones | — | Own projects | All projects; may transfer ownership |
+| Update milestone status | Own milestones | Own project students | All students |
+| Read notifications | Own inbox | Own inbox | Own inbox |
+| Read activity | Own actions | Own actions | All recorded actions |
+| Import projects | — | Own ownership | Admin ownership; may transfer after import |
+| Import students / migrate legacy data | — | — | Yes |
+| Manage accounts / selection window | — | — | Yes |
+| Full backup with attachments | — | — | Yes |
+| Export reports | Own permitted records | Own project records | All permitted records |
 
-- Account IDs are case insensitive. Students cannot create supervisor accounts.
-- Each student has at most one active assignment.
-- Capacity is the **total seats**, not remaining seats. Remaining seats are calculated from active assignments.
-- Only Open topics with a deadline of today or later accept selections or new waitlist requests. Dates use the computer's local calendar.
-- A failed switch never cancels the student's previous assignment.
-- A topic cannot shrink below its assigned student count. An assigned topic cannot be changed to Draft; use Closed instead.
-- Closing or expiring a topic blocks new selections but keeps existing assignments. Students can still cancel.
-- Selecting a project, including automatic promotion, removes that student's other waitlist requests.
-- Cancelling, switching away, or increasing a topic's capacity can trigger FIFO promotion if it is still open and within its deadline.
-- Deleting a project releases its students and removes its favorites and waitlist entries after a confirmation in the UI.
+## Daily workflow
 
-## Workflow
+1. **Admin:** create supervisor accounts, set the selection period, and transfer topic ownership where necessary. Blank start/end dates mean no date bound; Closed blocks new selections and approvals.
+2. **Supervisor:** create a project with category, description, total seats, selection deadline and mode. Approval is the default for new topics.
+3. **Student:** optionally create a team, invite classmates and wait for their acceptance. The team leader submits the proposal. Individual students can apply without a team.
+4. **Supervisor:** open Applications, read the proposal, and approve, reject or request changes. A returned proposal can be revised by its original applicant.
+5. **Assignment:** approval assigns every included applicant together or assigns nobody if any validation fails. The app creates Proposal, Development, Testing, Report and Presentation milestones.
+6. **Student:** update milestone status and submit a document or code/report URL. For a requested revision, submit a new version so the earlier submission remains in history.
+7. **Supervisor:** review the submission and leave feedback. Check the student/progress views or export a report.
+8. **Everyone:** review their notification inbox. Admins periodically back up the workspace, including attachment files.
 
 ```mermaid
 flowchart TD
-    A[Sign in] --> B{Account role}
-    B -->|Supervisor| C[Manage topics and inspect assignments]
-    B -->|Student| D[Search catalog and open details]
-    D --> E{Open and within deadline?}
-    E -->|No| F[Keep current assignment]
-    E -->|Yes| G{Seat available?}
-    G -->|Yes| H[Save new assignment atomically]
-    G -->|No| I[Join waitlist if unassigned]
-    H --> J[Release previous seat]
-    J --> K[Promote eligible waiting student]
-    C --> L[Save changes and activity]
-    K --> L
-    I --> L
+    A[Browse project] --> B{Selection mode}
+    B -->|Direct| C{Eligible and seat available?}
+    C -->|Yes| D[Assign and release prior seat]
+    C -->|Full| E[Join FIFO waitlist]
+    B -->|Approval| F[Submit individual or team proposal]
+    F --> G{Supervisor decision}
+    G -->|Changes requested| H[Revise and resubmit]
+    H --> G
+    G -->|Approved| I[Check every member and total seats]
+    I --> J[Assign all applicants atomically]
+    D --> K[Track milestones and submissions]
+    J --> K
+    K --> L[Supervisor feedback and reports]
 ```
+
+### Rules that protect the workflow
+
+- One active assignment per student. A failed Direct-mode switch preserves the old assignment.
+- Approval topics cannot be selected directly or entered through a waitlist. Waitlists belong to Direct topics only.
+- Team applications snapshot their members. Membership changes are blocked while a member has an active application or assignment. A leader must wait for other members to leave before dissolving a team.
+- Every approval applicant must be active and unassigned. A group must fit as a whole. A pending/returned application blocks Direct selection for its members.
+- A student may withdraw their own application even outside the selection period. A waitlist member may leave a queue even while selection is closed. Existing students may still cancel assignments and submit work after selection closes.
+- Default milestone due dates are 7, 28, 35, 42 and 49 days after assignment. Supervisors can add custom milestones for all currently assigned students on a project.
+- Deadline notifications are generated/refreshed while the app is in use; no background email or operating-system notification service is claimed.
+- Allowed attachments: PDF, DOCX, TXT, PNG, JPG/JPEG and ZIP, up to 20 MB. Files are copied into the workspace. The app saves attachment copies on request rather than executing uploaded files.
+- The latest feedback is retained on each submission. A revised submission is a new record, keeping previous versions visible.
 
 ## Screenshots
 
-These are captures of the running app with fictional demo data, not mockups. Native fonts and controls can look slightly different on Windows, macOS, and Linux.
+All screenshots were regenerated from the running **3.0.1** application using temporary fictional demonstration data. The screenshot scenario includes a team proposal, one approved individual, milestone progress and reviewed work; fresh workspaces start with the simpler seed dataset.
+
+![Version 3.0.1 overview](docs/screenshots/02-overview.png)
+
+<details>
+<summary>Open the complete 14-screen gallery</summary>
 
 ### Sign in
 
-![Sign-in screen](docs/screenshots/01-login.png)
+![Sign in](docs/screenshots/01-login.png)
 
-### Supervisor overview
+### Projects and selection modes
 
-![Supervisor overview](docs/screenshots/02-overview.png)
+![Projects and selection modes](docs/screenshots/03-projects.png)
 
-### Searchable project catalog
+### Applications and review
 
-![Project catalog](docs/screenshots/03-projects.png)
+![Applications and review](docs/screenshots/04-applications.png)
 
-### Student assignments
+### Teams and member roles
 
-![Student assignments](docs/screenshots/04-students.png)
+![Teams and member roles](docs/screenshots/05-teams.png)
+
+### Milestones and progress
+
+![Milestones and progress](docs/screenshots/06-progress.png)
+
+### Submissions and feedback
+
+![Submissions and feedback](docs/screenshots/07-submissions.png)
+
+### Notification centre
+
+![Notification centre](docs/screenshots/08-notifications.png)
+
+### Account administration
+
+![Account administration](docs/screenshots/09-administration.png)
+
+### Imports and printable reports
+
+![Imports and printable reports](docs/screenshots/10-import-and-reports.png)
 
 ### Light theme
 
-![Light theme](docs/screenshots/05-light-mode.png)
+![Light theme](docs/screenshots/11-light-mode.png)
 
-### Student selection
+### Saved preferences
 
-![Student selection](docs/screenshots/06-student-selection.png)
+![Saved preferences](docs/screenshots/12-settings.png)
 
-## Version 1.0 vs 2.0
+### Student overview
 
-| Capability | Original Java project | This 2.0 edition |
-| --- | --- | --- |
-| Interface | Separate Swing menus and forms | Consistent sidebar workspace and dashboard |
-| Accounts | Hardcoded teacher/student checks | Persistent individual accounts with salted password hashes |
-| Database setup | MySQL service and credentials | Local storage initialized automatically |
-| Project search | Exact project-name lookup | Live multi-field search and category filtering |
-| Selection integrity | Separate updates to students and remaining seats | Validated assignment changes and derived remaining capacity |
-| Topic details | Name, supervisor, remaining seats | Category, description, total capacity, deadline, status |
-| Student tools | Select, cancel, query | Selection/switching, favorites, waitlists, personal activity |
-| Reporting | Basic joined statistics and exports | Dashboard, scoped records, timeline, CSV/JSON, backups |
-| Delivery | IDE-oriented source and compiled output | Clean source, launchers, tests, screenshots and documentation |
+![Student overview](docs/screenshots/13-student-overview.png)
 
-## Original Java project and data
+### Supervisor student view
 
-The supplied project used Java Swing, MySQL, Gson, and MySQL Connector/J. Its original responsibilities are mapped in [docs/LEGACY-MAPPING.md](docs/LEGACY-MAPPING.md).
+![Supervisor student view](docs/screenshots/14-students.png)
 
-Existing MySQL data is **not automatically migrated**. The uploaded SQL has a different schema, and its `remaining_team_members` field is not total capacity. Do not run the old SQL against the new workspace. The new app uses a separate demo dataset, and the old database can remain intact.
+</details>
 
-## Scope and practical limits
+A standalone gallery is available in [docs/SCREENSHOTS.md](docs/SCREENSHOTS.md).
 
-This is an offline educational desktop application for a single computer. It is not a hosted university portal and has no email verification, password-reset service, or cross-device synchronization. Anyone with filesystem access to its data directory can read or change records; protect that directory and backups. Passwords are hashed, but the workspace is not encrypted. Theme choice lasts for the current session.
+## Import and original-data migration
 
-The ProjectPilot and TopicNest packages are differently branded distributions of the same rewrite. Their core features are equivalent; neither is presented as an independently developed implementation.
+Open **Import & reports**. Supervisors can import projects. Admins can also import students or run **Legacy paired migration**.
 
-## Code architecture
+- Project CSV: `title,supervisor,category,description,capacity,deadline,status,selection_mode`. Required: title and total capacity. Other omitted fields receive documented defaults; use the supplied template.
+- Student CSV: `id,name,major,password`. Password can be omitted when a valid fallback initial password is supplied in the import dialog. Preview never displays password values. IDs must be unique and existing accounts cause the whole import to roll back.
+- Imports validate the file before showing a preview. **Confirm import** is the write step. Correct an invalid file and preview it again.
+- Legacy migration needs both old Projects and Students exports. The app validates references, computes total capacities correctly, creates student accounts with the supplied initial password and preserves selected-project relationships. New internal project IDs are mapped automatically.
 
-The Python edition is a fresh Python implementation of the original Java workflows. It does not require Java, JNI, Gson, or MySQL.
+See [docs/LEGACY-MAPPING.md](docs/LEGACY-MAPPING.md) and [CSV templates](docs/import-templates/README.md). No live connection to the original MySQL server is required.
 
-| Layer | File | Responsibility |
-| --- | --- | --- |
-| Entry point | `main.py` | Parse data location, create Tk root, initialize service, launch UI |
-| Presentation | `projectpilot/ui.py` | Pages, dialogs, tables, themes, keyboard shortcuts; delegates mutations to the service |
-| Business logic | `projectpilot/service.py` | Authentication, validation, role checks, selection transactions, FIFO promotion and reporting |
-| Persistence | SQLite through `Service` | Relational tables, foreign keys, constraints, atomic transactions and backup |
-| Branding | `projectpilot/config.py` | Product name, accent color, maintainer details |
-| Demo data | `projectpilot/seed.json` | Example topics; relative deadlines calculated on first run |
-| Verification | `tests/` | Business-rule regressions and GUI smoke test |
+## Reports, exports and backup
 
-Core programming concepts include object-oriented services, context managers, parameterized SQL, relational joins, event-driven GUI callbacks, and standard-library cryptography. The UI does not construct SQL or modify assignment tables directly.
+**Reports / Import & reports → Create PDF report** offers Project summary, Assignments and Progress. Supervisors/admins also get Workload. Reports follow the current role's access scope. Standard PDF fonts support Western/Latin text; unsupported Unicode characters may be replaced with `?`. CSV and JSON preserve Unicode and are preferable when complete multilingual names are required.
 
-### Storage and consistency
+The project toolbar exports CSV or JSON. JSON includes permitted projects, student records, activity, applications, milestones and submission metadata, never password hashes or attachment bytes.
 
-`data/workspace.db` contains `users`, `projects`, `enrollments`, `favorites`, `waitlist`, and `activity` tables. An enrollment's primary key is the student account, enforcing one assignment. Foreign keys remove related selections, favorites and waitlist requests when a project is deleted.
+**Admin → Settings → Backup with attachments** creates a ZIP containing the database/JSON workspace and `attachments/`. Backups contain account hashes and student records; keep them private. To restore, close every app instance, keep a safety copy, and extract your backup's workspace file and attachments into the selected data directory. Restore a trusted backup as a unit; replacing only the database can leave attachment references missing.
 
-Write operations use `BEGIN IMMEDIATE`, commit, and rollback. Selection validation, the assignment update, released-seat promotion, and audit entries occur in the same transaction. Multiple local Python instances sharing the same database serialize writes; refresh other windows with `F5`. The last-seat race is covered by an actual two-thread regression test.
+Old 2.0 backups still restore in the matching language edition and migrate on first launch. Python SQLite workspaces and Java JSON workspaces are different formats; do not exchange their database files.
 
-Passwords use PBKDF2-HMAC-SHA256 with a random 16-byte salt and 210,000 iterations. Exports omit password hashes. CSV cells with formula-triggering prefixes are escaped for spreadsheet use.
+## Version history
 
-### Source tree
+| Release | Main changes |
+| --- | --- |
+| 1.0 | Original Java Swing/MySQL ProjectSelectionManager: projects, student selection, statistics and exports |
+| 2.0.0 | Python rewrite and Java modernization; local storage, dashboard, accounts, search, themes, favorites and Direct waitlists |
+| **3.0.1** | Administration, supervisor ownership, proposal review, teams, progress, document submissions, notifications, imports/migration, PDFs, saved preferences and Windows installer build files |
 
-```text
-ProjectPilot-Python/
-├── main.py
-├── projectpilot/
-│   ├── __init__.py
-│   ├── config.py
-│   ├── service.py
-│   ├── ui.py
-│   └── seed.json
-├── tests/
-│   ├── test_service.py
-│   └── ui_smoke.py
-├── docs/
-│   ├── screenshots/
-│   ├── LEGACY-MAPPING.md
-│   └── TESTING.md
-├── START-WINDOWS.bat
-├── RUN-TESTS.bat
-├── start.sh
-├── requirements.txt
-├── requirements-dev.txt
-├── CHANGELOG.md
-├── QUICK-START.txt
-└── README.md
-```
+The original Java history remains documented in both named distributions. ProjectPilot and TopicNest are differently branded distributions of the same rewrite, with equivalent features. They are not presented as independent implementations.
 
-## Install and run
+## Python setup
 
-**Requirements:** Python 3.10+ with Tkinter and SQLite. No pip packages are required to run the application. A graphical desktop is required.
-
-### Windows / PyCharm
-
-1. Install Python with **Tcl/Tk and IDLE** enabled. Add Python to PATH.
-2. Extract the complete ZIP.
-3. Double-click `START-WINDOWS.bat`, or run:
+**Runtime:** Python 3.10+ with Tkinter and SQLite. No pip packages are required to run the source application.
 
 ```powershell
 py -3 main.py
 ```
 
-In PyCharm, open the extracted folder as a project, select a Python 3.10+ interpreter, and run `main.py`. No database server configuration is needed.
-
-### Linux / macOS
-
 ```bash
 python3 main.py
 ```
 
-On Debian/Ubuntu, install `python3-tk` if your Python installation lacks Tkinter. On macOS, use a Python distribution with working Tk support. You may also run `sh start.sh`.
+In PyCharm, open the extracted folder, choose a Python 3.10+ interpreter, and run `main.py`. On Debian/Ubuntu, install `python3-tk` if Tkinter is missing. A graphical desktop is required.
 
-The default data path is beside `main.py`, independent of the terminal's current directory. An alternative workspace can be selected with:
+The source app stores data beside `main.py` in `data/workspace.db`. Installed Windows builds use `%LOCALAPPDATA%/ProjectPilot/Python/`. Choose another workspace with:
 
 ```bash
-python3 main.py --data-dir /path/to/my-workspace
+python3 main.py --data-dir /path/to/workspace
 ```
 
-Use a writable local directory. Avoid putting the data directory inside a public repository or an unreliable network/sync folder.
+### Python architecture
 
-## Back up, restore, reset
+| Layer | Files | Responsibility |
+| --- | --- | --- |
+| Entry | `main.py` | Runtime data location, Tk root and application launch |
+| Core storage | `projectpilot/service.py` | SQLite initialization, parameterized queries, password hashing and original Direct workflow |
+| 3.0.1 workflows | `projectpilot/advanced.py` | Schema migration, admin roles, ownership, teams, applications, milestones, submissions, imports and scoped reports |
+| Presentation | `projectpilot/ui.py`, `projectpilot/advanced_ui.py` | Reusable controls plus current role-specific screens; no SQL in the UI |
+| PDF output | `projectpilot/reports.py` | Paginated A4 reports, measured text wrapping and escaped PDF strings |
+| Branding / seed | `projectpilot/config.py`, `projectpilot/seed.json` | Name, accent, maintainer and initial fictional topics |
+| Verification | `tests/` | Core/advanced regressions and GUI workflow/screenshot runner |
+| Windows packaging | `tools/`, `.github/workflows/` | PyInstaller runtime bundle plus Inno Setup installer recipe |
 
-- **Backup:** sign in as supervisor → Settings → Back up database. SQLite's backup API creates a consistent database copy.
-- **Restore:** close every app instance, keep a safety copy of the current file, and copy the backup to `data/workspace.db` (or your custom data directory). Relaunch.
-- **Reset the demo:** close the app and move the entire data directory aside. A fresh demo workspace is created on next launch. Keep the old directory if you might need its records.
-- **GitHub:** runtime data, exports, caches, and virtual environments are excluded by `.gitignore`. Review what you commit; do not commit real student records or backups.
+SQLite tables cover users, admin membership, projects, enrollments, favorites, waitlists, teams, invitations, application/member snapshots, tasks, submissions, notifications, settings and preferences. Write operations use `BEGIN IMMEDIATE`, commit and rollback. Group approval, assignment, notifications and milestone creation share a transaction. Constraints prevent duplicate assignments; foreign keys remove dependent project records. Unreferenced attachment files can remain after project deletion and are retained in full backups.
 
-## Verification
+Passwords use salted PBKDF2-HMAC-SHA256 with 210,000 iterations. Read paths enforce current account state and effective role. CSV formulas are escaped on export. User data is local, not encrypted.
 
-From the project root:
+### Upgrade an existing Python 2.0 workspace
+
+1. Close all old app instances and retain an independent copy of the old `data/` folder.
+2. Extract this release into a new folder and copy the old `data/` folder beside its `main.py`, or point `--data-dir` at your chosen copy.
+3. Start the app. It creates `workspace.pre-3.0.1.db` before changing an old schema, then adds the new tables and fields.
+4. Existing topics retain **Direct** mode and are initially owned by `teacher`. Existing accounts, assignments and password hashes remain.
+5. Sign in using the administrator ID shown on the login screen. Create the real supervisor accounts and transfer ownership through project editing as required.
+
+### Run checks
 
 ```bash
 python3 -m unittest discover -s tests -v
+python3 -m tests.ui_smoke
 ```
 
-The included suite has **18 regression tests**. It checks account validation, duplicate IDs, password changes, role boundaries, capacity, successful and failed switches, deadlines, waitlist promotion, deletion, export privacy, CSV escaping, backup/restart, and competing requests for the last seat.
-
-The optional GUI check requires a desktop display. Pillow is needed only when saving screenshots:
+The regression suite contains **45 tests**. GUI checks require a desktop display. To recreate screenshots, additionally install Pillow:
 
 ```bash
-python3 -m tests.ui_smoke
 python3 -m pip install -r requirements-dev.txt
 python3 -m tests.ui_smoke --out docs/screenshots
 ```
 
-See [docs/TESTING.md](docs/TESTING.md) for the recorded verification and its limits.
+## Source layout
 
-## Troubleshooting
+```text
+ProjectPilot-Python/
+├── main.py
+├── projectpilot/                 # core, workflows, UI, reports, seed
+├── tests/                    # regression and GUI/screenshot checks
+├── docs/
+│   ├── screenshots/          # 14 current 3.0.1 screens
+│   ├── import-templates/
+│   ├── WINDOWS-INSTALLER.md
+│   ├── LEGACY-MAPPING.md
+│   └── TESTING.md
+├── assets/app.ico
+├── tools/                    # Windows installer builders and recipe
+├── .github/workflows/windows-installer.yml
+├── START-WINDOWS.bat
+├── BUILD-WINDOWS-INSTALLER.bat
+├── CHANGELOG.md
+└── README.md
+```
 
-| Symptom | Fix |
-| --- | --- |
-| `No module named tkinter` | Install Python's Tk support (`python3-tk` on Debian/Ubuntu) |
-| `no display name` / cannot connect to display | Run on a graphical desktop; the production app is not headless |
-| Python not found | Install Python 3.10+ and use `py -3` or `python3` as appropriate |
-| Workspace cannot be written | Extract the ZIP into a writable folder or use `--data-dir` |
-| Database is locked | Close long-running external database editors; do not place the DB on a network drive |
-| Topic has seats but selection fails | Check its status and deadline, then refresh with `F5` |
-| No real account password available | This local demo has no email recovery service; retain backups and credentials |
+## Practical limits and troubleshooting
+
+- Run on a graphical desktop. Install Tkinter for Python or desktop Java 17+ for the Java edition if a display/runtime error appears.
+- This is a local desktop application. It has no hosted portal, email verification, email password recovery or cross-device synchronization.
+- The Java edition allows one process per data directory. Close the other instance if a workspace-lock message appears. Python writes serialize through SQLite; refresh other windows with F5.
+- Use a writable local data directory. Do not hand-edit live workspace files or put real data, credentials, attachments or backups in a public repository.
+- PDF output uses standard Western/Latin fonts; JSON and CSV preserve full Unicode. Submit code through a URL or ZIP attachment.
+- UI fonts and native dialogs can vary by operating system. Windows scripts and installer recipes are supplied, but Windows execution is not claimed as tested here.
+- Runtime data and build outputs are excluded by `.gitignore`. The Java executable JAR is intentionally included. Choose a repository license for your own code if you want to grant reuse rights; dependency licenses are kept separately.

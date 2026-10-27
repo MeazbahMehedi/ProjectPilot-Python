@@ -1,21 +1,27 @@
 # Changelog
 
-## 2.0.0 — 2026-10-27
+## 3.0.1 — 2026-10-27
 
-- Rebuilt the original ProjectSelectionManager workflows around a sidebar desktop workspace.
-- Added dark/light themes, live topic search, category filters, sortable tables, and favorites.
-- Added student self-registration, individual credentials, salted PBKDF2 password hashing, and password changes.
-- Added project descriptions, categories, statuses, deadlines, and validated capacities.
-- Added atomic project switching: a failed switch keeps the student's previous assignment.
-- Added FIFO waitlists with automatic assignment when a seat opens or capacity increases.
-- Replaced manually decremented capacity with counts derived from current assignments.
-- Added a role-scoped activity timeline, workspace JSON exports, formula-safe project CSV exports, and backups.
-- Added a statistics dashboard, student assignment view, and keyboard shortcuts.
-- Added launchers, source code, regression checks, screenshots, and detailed documentation.
+- Added administrator account management, enable/disable, password resets and selection periods.
+- Enforced supervisor ownership throughout project management, review and reporting.
+- Added individual/team project applications, approval/rejection, change requests, resubmission and withdrawal.
+- Kept Direct and Approval modes distinct; approval cannot bypass review through a waitlist.
+- Added teams, invitation consent, member roles, frozen application membership and atomic whole-team approval.
+- Added five default milestones, custom supervisor milestones, statuses and progress percentages.
+- Added document/code-link submissions, copied attachments, review decisions and feedback.
+- Added scoped in-app notifications, unread counts and deduplicated deadline reminders.
+- Added CSV preview/import with transaction rollback and paired original-MySQL migration.
+- Added A4 PDF summaries, assignment lists, progress and workload reports.
+- Persisted theme, window dimensions, font size and project search/filter preferences.
+- Added inline form errors, unsaved-change prompts, save feedback and keyboard navigation.
+- Added pre-upgrade backup and automatic migration from the matching 2.0 workspace format.
+- Added Windows runtime-bundling scripts, Inno Setup recipe, app icon and manual build workflow. Windows installer generation requires Windows; no prebuilt EXE is included.
+- Replaced all current screenshots with 14 captures of this release and rewrote README architecture/workflow/setup documentation.
 
-## 1.0 — Provided Java project
+## 2.0.0
 
-- Java Swing UI with teacher/student menus.
-- MySQL Projects and Students tables.
-- Add/edit/delete topics, select/cancel projects, statistics, and CSV/JSON exports.
-- External Gson and MySQL Connector dependencies.
+Local Python/Tkinter/SQLite rewrite and Java/Swing/JSON modernization: dashboard, accounts, hashing, search, themes, favorites, Direct selection, waitlists, exports and backups.
+
+## 1.0
+
+Original Java Swing/MySQL ProjectSelectionManager with topic management, student selection, joined statistics and CSV/JSON export.

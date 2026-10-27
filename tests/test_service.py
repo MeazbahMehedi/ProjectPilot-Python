@@ -6,14 +6,15 @@ import threading
 import unittest
 from pathlib import Path
 from datetime import date, timedelta
-from projectpilot.service import Service, RuleError
+from projectpilot.advanced import Service
+from projectpilot.service import RuleError
 
 class ServiceTests(unittest.TestCase):
     def setUp(self):
         self.temp=tempfile.TemporaryDirectory();self.path=Path(self.temp.name)/'workspace.db';self.s=Service(self.path);self.s.login('teacher','DemoPass123!')
     def tearDown(self):self.temp.cleanup()
     def project(self,**changes):
-        p=dict(title='Test project',supervisor='Dr Test',category='Testing',description='A real test project.',capacity=1,deadline=(date.today()+timedelta(days=10)).isoformat(),status='Open');p.update(changes);return self.s.save_project(p)
+        p=dict(title='Test project',supervisor='Dr Test',category='Testing',description='A real test project.',capacity=1,deadline=(date.today()+timedelta(days=10)).isoformat(),status='Open',selection_mode='Direct');p.update(changes);return self.s.save_project(p)
     def student(self,uid='student'):self.s.login(uid,'DemoPass123!')
     def test_login_case_insensitive_and_bad_password(self):
         self.s.login('TEACHER','DemoPass123!');self.assertEqual(self.s.user['role'],'teacher')
@@ -79,7 +80,7 @@ class ServiceTests(unittest.TestCase):
         self.student();path=Path(self.temp.name)/'export.json';self.s.export(path,'json');payload=json.loads(path.read_text());self.assertEqual(len(payload['students']),1);self.assertNotIn('password',path.read_text());self.assertNotIn('DemoPass',path.read_text())
         with self.assertRaises(RuleError):self.s.export(self.path,'json')
     def test_backup_and_restart(self):
-        path=Path(self.temp.name)/'backup.db';self.s.backup(path);new=Service(path);new.login('teacher','DemoPass123!');self.assertEqual(len(new.projects()),6)
+        path=Path(self.temp.name)/'backup.db';self.s.login('admin','DemoPass123!');self.s.backup(path);new=Service(path);new.login('teacher','DemoPass123!');self.assertEqual(len(new.projects()),6)
         self.student()
         with self.assertRaises(RuleError):self.s.backup(path)
     def test_concurrent_last_seat(self):

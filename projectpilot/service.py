@@ -67,7 +67,7 @@ class Service:
             c.execute('BEGIN IMMEDIATE')
             if c.execute('SELECT COUNT(*) FROM users').fetchone()[0] == 0:
                 for uid, name, role, major in [('teacher','Demo Supervisor','teacher','Faculty'),('student','Demo Student','student','Software Engineering'),('student2','Alex Chen','student','Computer Science'),('student3','Sam Lee','student','Information Systems')]:
-                    c.execute('INSERT INTO users VALUES (?,?,?,?,?)', (uid,name,major,role,password_hash('DemoPass123!')))
+                    c.execute('INSERT INTO users(id,name,major,role,password) VALUES (?,?,?,?,?)', (uid,name,major,role,password_hash('DemoPass123!')))
                 seeds = json.loads((Path(__file__).parent/'seed.json').read_text(encoding='utf-8'))
                 for p in seeds:
                     p['deadline'] = (date.today()+timedelta(days=p.pop('days'))).isoformat()
@@ -120,7 +120,7 @@ class Service:
         name=required(name,'Name');major=required(major,'Major');valid_password(password)
         try:
             with self.transaction() as c:
-                c.execute('INSERT INTO users VALUES (?,?,?,?,?)',(uid,name,major,'student',password_hash(password)))
+                c.execute('INSERT INTO users(id,name,major,role,password) VALUES (?,?,?,?,?)',(uid,name,major,'student',password_hash(password)))
                 self.log(c,uid,'Student account created')
         except sqlite3.IntegrityError: raise RuleError('That account ID is already registered.') from None
 

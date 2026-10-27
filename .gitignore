@@ -10,3 +10,7 @@ data/
 *.db
 *.db-*
 .DS_Store
+package/
+installers/
+*.spec
+dist/

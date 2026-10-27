@@ -1,37 +1,28 @@
-# Original project and migration notes
+# Original Java project and migration
 
-The uploaded source was a Java Swing/MySQL application named **ProjectSelectionManager**. Version 2.0 rewrites its workflows; it does not wrap or execute the old Java program.
+The source was Java Swing/MySQL ProjectSelectionManager. Python rewrites the workflows in Tkinter/SQLite; Java retains Swing and uses local JSON persistence. Neither new edition executes the old program or needs the MySQL connector.
 
-| Original source | Responsibility in version 2.0 |
+| Original responsibility | Current responsibility |
 | --- | --- |
-| `ProjectSelectionManager.java` / `MainInterface.java` | Launcher and desktop navigation |
-| `AuthHandler.java` | Account registration, login, password changes, role checks |
-| `StudentHandler.java` | Student selection, cancellation, waitlisting and saved topics |
-| `TeacherHandler.java` | Supervisor topic management and assignment reports |
-| `DBHelper.java` | Storage initialization, integrity rules and reporting |
-| `DataExporter.java` | Role-scoped JSON and project CSV exports |
+| MainInterface / launcher | Current role-specific desktop navigation |
+| AuthHandler | Individual credentials, role checks, account administration |
+| TeacherHandler | Owned topics, applications, milestones, submissions and reports |
+| StudentHandler | Direct selection, applications, teams, progress and submissions |
+| DBHelper | Current storage, migration and integrity rules |
+| DataExporter | Scoped CSV/JSON and printable PDF reports |
 
-The Python edition implements these responsibilities with Python/Tkinter and SQLite. The Java edition keeps Java/Swing and uses an atomic JSON store with the supplied Gson 2.11.0 dependency. No MySQL service or connector is needed for either new edition.
-
-## Legacy field mapping
-
-| Legacy MySQL field | New field / meaning |
+| Original field | New meaning |
 | --- | --- |
-| `Projects.project_id` | Project `id` |
-| `Projects.project_name` | Project `title` |
-| `Projects.supervisor_name` | Project `supervisor` |
-| `Projects.remaining_team_members` | Remaining seats; **not** the new total capacity |
-| `Students.student_id` | Student account `id` |
-| `Students.student_name` | Student account `name` |
-| `Students.major` | Student account `major` |
-| `Students.selected_project_id` | Student assignment to a project |
+| project_id | Mapped internal project ID |
+| project_name | title |
+| supervisor_name | supervisor display name |
+| remaining_team_members | Remaining seats; add selected student count to obtain total capacity |
+| student_id | Student account ID, preserved as text |
+| student_name / major | Account name / major |
+| selected_project_id | Mapped student assignment |
 
-When transferring existing records, total capacity must equal legacy remaining seats **plus** the number of selected students. New description, category, status, deadline and account credentials also need to be supplied.
+3.0.1 includes a paired CSV importer for original Projects/Students exports. See [import-templates/README.md](import-templates/README.md). It does not run the old SQL, connect to MySQL or use the old destructive DROP TABLE statement. The original embedded database password was removed.
 
-**Existing MySQL records are not automatically imported.** The uploaded SQL contains two example projects and two example students, not a running database snapshot. Version 2.0 initializes a separate fictional demo workspace. Keep the old database intact. For a small real dataset, create accounts and projects in the new app, set total capacities correctly, then let students select their projects. A bulk migration requires a dedicated importer; none is included.
+Same-edition 2.0 workspaces migrate automatically, preserving a pre-upgrade backup. Existing topics remain Direct and initially belong to teacher. Admins can create supervisors and transfer ownership.
 
-The original database password and hardcoded login checks were removed. The original SQL's destructive `DROP TABLE Students` statement is not used by the new apps. Demo credentials are documented openly and should be changed before entering real records.
-
-## What is shared between the named distributions?
-
-ProjectPilot and TopicNest use the same application rules and equivalent features. Branding, accent color, package name (Python), executable name (Java), and maintainer display differ. They are named distributions of the same rewrite, not independently developed projects. The README retains the original Java history in both distributions.
+ProjectPilot and TopicNest share the same rewrite and features. Their names, accent colors, Python package names, Java executable names and maintainer displays differ.

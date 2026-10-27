@@ -1,32 +1,38 @@
-# Verification record
+# ProjectPilot-Python 3.0.1 verification
 
-Product: ProjectPilot-Python 2.0.0  
-Date: 2026-10-27  
-Environment: Linux; Python 3.12 / OpenJDK 17; virtual X11 display for GUI checks.
-
-## Completed checks
+Verified on 2026-10-27 with Linux, Python 3.12/OpenJDK 17 and a virtual X11 display for native GUI checks.
 
 | Check | Result |
 | --- | --- |
-| Business-rule regression suite | PASS — 18 unittest cases, including a real two-thread last-seat race |
-| Login and logout screens | PASS |
-| Supervisor Overview, Projects, Students, Activity, Settings | PASS |
-| Student Overview, Projects, My selection, Activity, Settings | PASS |
-| Live project search | PASS |
-| Dark and light themes | PASS |
-| Minimum supported window layout | PASS |
-| Real launch entry point with a new temporary workspace | PASS |
-| Six running-UI screenshots | Captured and embedded in README |
+| Service regression suite | PASS — 45 unittest cases |
+| Admin / supervisor / student page navigation | PASS |
+| Supervisor ownership and student record scope | PASS |
+| Individual/team approval and whole-group capacity rejection | PASS |
+| Revision requests, resubmission and pending-application restrictions | PASS |
+| Milestone status, attachments, submission feedback and notifications | PASS |
+| CSV preview, quoted fields and transaction rollback | PASS |
+| Paired legacy migration with correct total capacity and preserved IDs | PASS |
+| Same-edition 2.0 workspace migration | PASS |
+| Preferences, themes, topic search and modal project details | PASS |
+| Inline validation and clean form cancellation | PASS |
+| Actual asynchronous CSV import through the desktop UI | PASS |
+| Project table at minimum window size | PASS |
+| Real main.py / executable-JAR launch using a new temporary data directory | PASS |
+| Printable PDF syntax, pagination and visual layout | PASS |
+| Current screenshots | 14 running-UI captures with fictional demonstration data |
 
-Tests use temporary workspaces and do not ship test databases. Persistence uses SQLite transactions and foreign keys. The two named distributions share the same business rules, with separate branding and maintainer display.
+Tests and screenshots use temporary workspaces. The supplied files contain no real student databases, test accounts beyond source-defined demo defaults, or copied submission directories.
 
-## Practical limits of verification
+## Platform limits
 
-These checks were run on Linux. Windows batch launchers were reviewed but were not executed on Windows. The Python and Java applications use native GUI libraries, so fonts and control rendering can differ by operating system. Automated page checks do not click every possible native file-picker path. Exports and backups are covered directly at the service layer. No remote-server, multi-device, encryption, or disaster-recovery guarantees are claimed.
+Windows batch files, PowerShell builders, GitHub Actions YAML and Inno Setup recipes were prepared and reviewed as source. They were not executed on Windows here, and no prebuilt Windows EXE is included. Native fonts/dialogs can vary by operating system. The installer workflow needs a Windows runner with its build dependencies. Standard PDF fonts have the Western/Latin character coverage described in README; CSV/JSON preserve Unicode.
+
+These checks do not claim a hosted service, email delivery, cross-device synchronization, encryption, exhaustive native file-picker testing or universal recovery from filesystem/power failures. The Java store is local JSON with a process lock, while Python uses SQLite transactions.
 
 ## Reproduce
 
 ```bash
 python3 -m unittest discover -s tests -v
 python3 -m tests.ui_smoke
+python3 -m tests.ui_smoke --out docs/screenshots
 ```

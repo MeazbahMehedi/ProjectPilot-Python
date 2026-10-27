@@ -1,7 +1,11 @@
-1. Extract the ZIP completely. Do not run the app from inside the ZIP viewer.
-2. Open README.md for the full guide.
-3. On Windows, double-click START-WINDOWS.bat.
-4. Demo supervisor: teacher / DemoPass123!
-   Demo student:    student / DemoPass123!
-5. The workspace is created locally on first launch. No MySQL setup is needed.
-6. Change demo passwords before entering real records.
+ProjectPilot Python 3.0.1
+
+Extract the whole ZIP. Run START-WINDOWS.bat.
+Python source needs Python 3.10+ with Tkinter; Java JAR needs desktop Java 17+.
+Demo admin: admin / DemoPass123!
+Demo supervisor: teacher / DemoPass123!
+Demo student: student / DemoPass123!
+
+README.md describes all new features, architecture, workflow and screenshots.
+Windows installer build scripts are included; a prebuilt EXE is not included.
+Same-edition 2.0 data migrates automatically with a pre-upgrade backup.
